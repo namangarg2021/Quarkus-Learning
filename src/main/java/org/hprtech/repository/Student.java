@@ -13,6 +13,16 @@ public class Student {
     String name;
     String branch;
 
+    public Student() {
+
+    }
+
+    public Student(Long studentId, String name, String branch) {
+        this.studentId = studentId;
+        this.name = name;
+        this.branch = branch;
+    }
+
     public Long getStudentId() {
         return studentId;
     }

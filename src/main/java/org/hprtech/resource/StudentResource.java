@@ -25,19 +25,27 @@ public class StudentResource {
 //        List<Student> studentList =studentRepository.listAll();
 //        return Response.ok(studentList).build();
 //    }
-//
-//    @GET
-//    @Path("getCsStudentList")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getCsStudentList(){
-//        List<Student> studentList =studentRepository.listAll();
-//        List<Student>csStudentList = new ArrayList<>();
-//        studentList.forEach(student -> {
-//            if(student.getBranch().equals("CS"))
-//                csStudentList.add(student);
-//        });
-//        return Response.ok(csStudentList).build();
-//    }
+
+    @GET
+    @Path("getCsStudentList")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCsStudentList(){
+        List<Student> studentList =studentRepository.listAll();
+        List<Student>csStudentList = new ArrayList<>();
+        studentList.forEach(student -> {
+            if(student.getBranch().equals("CS"))
+                csStudentList.add(student);
+        });
+        return Response.ok(csStudentList).build();
+    }
+
+    @GET
+    @Path("branch/{branch}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStudentListByBranch(@PathParam("branch")String branch){
+        List<Student> studentList = studentRepository.list("branch",branch);
+        return Response.ok(studentList).build();
+    }
 
     @POST
     @Path("addStudent")
@@ -54,12 +62,12 @@ public class StudentResource {
     }
 
     @GET
-    @Path("student/{id}")
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentById(@PathParam("id")Long id) {
         Student student = studentRepository.findById(id);
         if (student == null) {
-            return Response.ok(Response.status(Response.Status.NOT_FOUND)).build();
+            return Response.ok(Response.status(Response.Status.NO_CONTENT)).build();
         } else {
             return Response.ok(student).build();
         }
@@ -71,6 +79,34 @@ public class StudentResource {
     public Response getStudentList(){
         List<Student> studentList =studentRepository.listAll();
         return Response.ok(studentList).build();
+    }
+
+    @PUT
+    @Path("update/{id}")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateStudent(@RequestBody Student studentUpdate,@PathParam("id")Long id) {
+        Student student = studentRepository.findById(id);
+        if (student!= null) {
+            student.setName(studentUpdate.getName());
+            return Response.ok(student).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    @DELETE
+    @Path("delete/{id}")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response deleteStudent(@PathParam("id")Long id) {
+        boolean isDeleted = studentRepository.deleteById(id);
+        if (isDeleted) {
+            return Response.ok(Response.Status.NO_CONTENT).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
 }
