@@ -1,13 +1,14 @@
 package org.hprtech.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.hprtech.entity.StudentRepository;
-import org.hprtech.repository.Student;
+import org.hprtech.repository.StudentRepository;
+import org.hprtech.entity.Student;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -48,11 +49,13 @@ public class StudentResource {
     }
 
     @POST
+    @RolesAllowed("admin")
     @Path("addStudent")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addStudent(@RequestBody Student student) {
+        System.out.println(student);
         studentRepository.persist(student);
         if (studentRepository.isPersistent(student)) {
             return Response.created(URI.create("/student/" + student.getStudentId())).build();
@@ -62,6 +65,7 @@ public class StudentResource {
     }
 
     @GET
+    @RolesAllowed({"admin","teacher"})
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentById(@PathParam("id")Long id) {
@@ -74,6 +78,7 @@ public class StudentResource {
     }
 
     @GET
+    @RolesAllowed({"admin","teacher","student"})
     @Path("getAllStudent")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStudentList(){

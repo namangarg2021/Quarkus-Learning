@@ -1,4 +1,5 @@
-package org.hprtech.repository;
+package org.hprtech.entity;
+
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,9 +1,9 @@
 package org.hprtech.resource;
 
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.security.TestSecurity;
 import io.restassured.RestAssured;
-import static org.hamcrest.CoreMatchers.*;
-
+import io.vertx.ext.auth.authorization.Authorization;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
@@ -11,34 +11,16 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.*;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 @QuarkusTest
 @Tag("integration")
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class StudentResourceTest {
-
-//    @Test
-//    void getStudentList() {
-//        RestAssured.given()
-//                    .when()
-//                    .get("/getStudentList")
-//                    .then()
-//                    .body("size()", CoreMatchers.equalTo(4))
-//                    .body("name",hasItems("Rahul","Mohit"))
-//                    .body("branch",hasItems("CS","EE"));
-//    }
-//
-//    @Test
-//    void getCsStudentList() {
-//        RestAssured.given()
-//                .when()
-//                .get("/getCsStudentList")
-//                .then()
-//                .body("size()", CoreMatchers.equalTo(2))
-//                .body("name",hasItems("Rahul","Aakanksha"));
-//    }
+class StudentResourceTest3 {
 
     @Order(1)
+    @TestSecurity(authorizationEnabled=false)
     @Transactional
     @Test
     void addStudent() {
@@ -56,6 +38,7 @@ class StudentResourceTest {
 
     }
     @Order(2)
+    @TestSecurity(user = "testUser",roles = "teacher")
     @Test
     void getStudentById() {
         RestAssured.given()
@@ -70,6 +53,7 @@ class StudentResourceTest {
     }
 
     @Order(3)
+    @TestSecurity(user = "testUser",roles = "admin")
     @Test
     void getStudentList() {
         RestAssured.given()

@@ -1,8 +1,8 @@
-package org.hprtech.entity;
+package org.hprtech.repository;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import org.hprtech.repository.Student;
+import org.hprtech.entity.Student;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

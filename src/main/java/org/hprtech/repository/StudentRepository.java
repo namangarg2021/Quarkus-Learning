@@ -1,8 +1,8 @@
-package org.hprtech.entity;
+package org.hprtech.repository;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.hprtech.repository.Student;
+import org.hprtech.entity.Student;
 
 import java.util.List;
 
